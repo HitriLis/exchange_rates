@@ -1,28 +1,34 @@
 from vendors import AuthGoogleVendor
+from googleapiclient.errors import HttpError
 
 
 class GoogleSheetsApi(AuthGoogleVendor):
 
     def __init__(self, spreadsheet_id: str, credential_file: str, scopes: list):
-        super().__init__(credential_file, scopes)
+        super().__init__(credential_file, 'sheets', scopes)
         self.service = self._service()
         self.spreadsheet_id = spreadsheet_id
 
-    def get_data(self, range_sheet: str = 'Лист номер один!B2:D5', major_dimension: str = 'ROWS') -> dict:
+    def get_data_sheets(self, ranges_sheet: list, major_dimension: str = 'ROWS') -> dict:
+
         result = {}
         try:
-            result = self.service.spreadsheets().values().get(
+            result = self.service.spreadsheets().values().batchGet(
                 spreadsheetId=self.spreadsheet_id,
-                range=range_sheet,
+                ranges=ranges_sheet,
                 majorDimension=major_dimension
             ).execute()
-        except BaseException as err:
+        except HttpError as err:
             print(err)
         return result
 
+    def get_all_sheets(self) -> list:
+        result = {}
+        try:
 
-google_sheets_connector = GoogleSheetsApi(
-    spreadsheet_id="199p_MgfaQcfWoACDh-TIHet2ypH__M0mmOoYfcgnetk",
-    credential_file="jkjkj.json",
-    scopes=['https://www.googleapis.com/auth/spreadsheets']
-)
+            result = self.service.spreadsheets().get(
+                spreadsheetId=self.spreadsheet_id,
+            ).execute()
+        except HttpError as err:
+            print(err)
+        return result.get('sheets', [])
