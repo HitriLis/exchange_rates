@@ -61,6 +61,18 @@ services:
       timeout: 3s
       retries: 30
 
+  watcher_sheets_data:
+    build:
+      context: .
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python3 manage.py sheets_data_rate;'
+    volumes:
+      - .:/app/
+    depends_on:
+      - db
+      - redis
+      - app
+    restart: on-failure
+
 
 
 volumes:
