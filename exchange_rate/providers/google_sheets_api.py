@@ -31,16 +31,17 @@ class GoogleSheetsApi(AuthGoogleVendor):
         try:
             response = self.service.spreadsheets().values().batchGet(
                 spreadsheetId=self.spreadsheet_id,
-                ranges=ranges_sheet,
+                ranges=[i.get('title') for i in ranges_sheet],
                 majorDimension=major_dimension
             ).execute()
+            # print(response)
             result = response.get('valueRanges', [])
         except HttpError as err:
             print(err)
-        if value_only:
+        if value_only and result:
             data = []
             for item in result:
-                data += [t for t in item.get('values')]
+                data += [value for value in item.get('values')]
             result = data
         return result
 
@@ -56,6 +57,30 @@ class GoogleSheetsApi(AuthGoogleVendor):
         except HttpError as err:
             print(err)
         if ranges_flat and result:
-            result = [i.get('properties').get('title') for i in result]
+            result = [{
+                'title': i.get('properties').get('title'),
+                'sheet_id': i.get('properties').get('sheetId')
+            } for i in result]
 
         return result
+
+    def delete_row_sheets(self, start_index: int):
+        request_body = {
+            "requests": [
+                {
+                    "deleteDimension": {
+                        "range": {
+                            "sheetId": 'Лист',
+                            "dimension": "ROWS",
+                            "startIndex": 1,
+                            "endIndex": 6
+                        }
+                    }
+                }
+            ],
+        }
+
+        return self.service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheet_id,
+            body=request_body
+        ).execute()

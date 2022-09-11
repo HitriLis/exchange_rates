@@ -1,7 +1,8 @@
 import xmltodict
-import json
 import requests
 from datetime import datetime
+from datetime import timedelta
+
 
 class CurrencyQuotes:
 
@@ -18,8 +19,9 @@ class CurrencyQuotes:
 
     def get_quote(self) -> float:
         now = datetime.now()
+        date_req1 = now - timedelta(days=1)
         result = self.__call(params={
-                'date_req1': now.strftime('%d/%m/%Y'),
+                'date_req1': date_req1.strftime('%d/%m/%Y'),
                 'date_req2': now.strftime('%d/%m/%Y'),
                 'VAL_NM_RQ': 'R01235'
             })

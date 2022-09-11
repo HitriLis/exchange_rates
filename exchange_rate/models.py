@@ -5,14 +5,10 @@ from .utils import str_to_datetime
 class ExchangeRatesManager(models.Manager):
 
     @staticmethod
-    def get_list_values_from_google_data(values: tuple, idx: int) -> tuple:
-        """
-           Метод получения списка значений по индексу
-        """
-        return tuple(item[idx] for item in values)
-
-    @staticmethod
     def validate_data_values(values: tuple):
+        """
+          Метод валидации и нормализации данных
+        """
         pattern = {
             'google_sheets_id': int,
             'order': int,
@@ -39,6 +35,14 @@ class ExchangeRates(models.Model):
     delivery_time = models.DateTimeField(null=True, blank=True, verbose_name='Срок поставки')
     exchange_rate = models.FloatField(verbose_name='Обменный курс')
     objects = ExchangeRatesManager()
+
+    def get_dict_data(self):
+        return {
+            'google_sheets_id': self.google_sheets_id,
+            'order': self.order,
+            'price': self.price,
+            'delivery_time': self.delivery_time
+        }
 
     class Meta:
         verbose_name = 'Курс валют'
