@@ -34,6 +34,7 @@ class ExchangeRates(models.Model):
     price = models.FloatField(verbose_name='Стоимость')
     delivery_time = models.DateTimeField(null=True, blank=True, verbose_name='Срок поставки')
     exchange_rate = models.FloatField(verbose_name='Обменный курс')
+    is_expired = models.BooleanField(default=False, verbose_name='Срок обработки заказа истёк')
     objects = ExchangeRatesManager()
 
     def get_dict_data(self):
