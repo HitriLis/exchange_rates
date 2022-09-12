@@ -73,6 +73,18 @@ services:
       - app
     restart: on-failure
 
+  bot_start:
+    build:
+      context: .
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python3 manage.py bot_start;'
+    volumes:
+      - .:/app/
+    depends_on:
+      - db
+      - redis
+      - app
+    restart: on-failure
+
 
 
 volumes:

@@ -1,7 +1,6 @@
 import time
 from django.core.management.base import BaseCommand, CommandError
 from django.core.cache import cache
-from django.db.models import F
 from exchange_rate.models import ExchangeRates
 from exchange_rate.providers.google_sheets_api import GoogleSheetsApi
 from exchange_rate.providers.currency_quotes import currency_quotes
@@ -33,7 +32,6 @@ class Command(BaseCommand):
                             ) for item in convert_data]
                     ExchangeRates.objects.bulk_create(bulk_data)
                 else:
-                    print(currency_quotes.get_quote())
                     if not cache.get('update_quotes'):
                         value_currency = currency_quotes.get_quote()
                         cache.set('update_quotes', value_currency, 3600 * 24)

@@ -5,13 +5,13 @@ from dotenv import dotenv_values
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 config = dotenv_values(".env")
-SECRET_KEY = config['SECRET_KEY']
-PRIVATE_KEY_SIGN = config['PRIVATE_KEY_SIGN']
 
 DEBUG = True
 
 HOST_NAME = config['HOST']
 BASE_URL = config['BASE_URL']
+BOT_TOKEN = config['BOT_TOKEN']
+CHANNEL_ID = config['CHANNEL_ID']
 
 CSRF_TRUSTED_ORIGINS = [
     HOST_NAME,
@@ -121,14 +121,5 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    },
-}
-
-
-VENDORS = {
-    'ecp': {
-        'base_url': config['VENDOR__ECP__BASE_URL'],
-        'email': 'amorevad@gmail.com',
-        'password': 'M$rKHxK6=G_Nc$&H'
     },
 }
