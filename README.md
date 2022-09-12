@@ -1,7 +1,6 @@
-## run docker-compose
-```
-docker-compose up --build -d
-```
+## Быстрый старт
+- cp .env.dist .env
+- docker-compose up -d
 
 ## view logs
 ```
