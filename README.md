@@ -1,9 +1,14 @@
-# processing
+## run docker-compose
+```
+docker-compose up --build -d
+```
 
-### Create superuser
-````
-docker-compose exec app python3 manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'adminpass')"
-````
+## view logs
+```
+docker-compose logs --tail 1000 api
+```
+
+
 
 ### services
 ````
