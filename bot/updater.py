@@ -57,6 +57,6 @@ def callback_repeating(context):
     if data:
         text_message = ''
         for item in data:
-            text_message += f'Зака: {item.order}\nСрок обработки заказа истёк истек {item.delivery_time.strftime("%m/%d/%y")}\n\n'
+            text_message += f'Зака: {item.order}\nСрок обработки заказа истёк {item.delivery_time.strftime("%m/%d/%y")}\n\n'
         data.update(is_expired=True)
         context.bot.send_message(chat_id=settings.CHANNEL_ID, text=text_message)
